@@ -14,6 +14,7 @@ proxies = {'http': 'http://brd-customer-hl_d17528bd-zone-unlimited_datacenter9:b
 scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
 @app.route('/api/p1/solana/pools')
 def pools():
+    scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
     query = request.full_path
     gecko_url = gecko_base + query
     # Or: scraper = cloudscraper.CloudScraper()  # CloudScraper inherits from requests.Session
@@ -36,6 +37,7 @@ def pools():
 
 @app.route('/api/p1/solana/latest_pools')
 def latest_pools():
+    scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
     query = request.full_path
     gecko_url = gecko_base + query
     # Or: scraper = cloudscraper.CloudScraper()  # CloudScraper inherits from requests.Session
