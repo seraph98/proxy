@@ -19,7 +19,6 @@ class ProxyInfo:
         }
 
 proxy_list = [
-    ProxyInfo('brd-customer-hl_c1058bfc-zone-hk_center', 'nxz8uq87mzau'),
     ProxyInfo('brd-customer-hl_d17528bd-zone-usa_gmail_01', 'puiiflkhl0tz'),
     ProxyInfo('brd-customer-hl_d17528bd-zone-unlimited_datacenter1', 'ywvy74lo79wv'),
     ProxyInfo('brd-customer-hl_d17528bd-zone-unlimited_datacenter2', 'zy47qndq79o9'),
