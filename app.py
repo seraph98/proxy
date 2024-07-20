@@ -16,12 +16,16 @@ def pools():
     gecko_url = gecko_base + query
     scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
     # Or: scraper = cloudscraper.CloudScraper()  # CloudScraper inherits from requests.Session
+    data = ''
+    raw_data = ''
     try:
-        data = scraper.get(gecko_url, proxies=proxies).json()
+        raw_data = scraper.get(gecko_url, proxies=proxies)
+        data = raw_data.json()
     except Exception as e:
         print(gecko_url)
         print(e)
-        print(scraper.get(gecko_url, proxies=proxies))
+        print('raw_data:',raw_data)
+        print('data:', data)
         raise
     return data  # => "<!DOCTYPE html><html><head>..."
 
