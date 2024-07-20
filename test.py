@@ -19,11 +19,12 @@ def generate_random_parameters():
 i = 0
 
 while i < 10:
-    scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
+    scraper = cloudscraper.create_scraper(browser="firefox")  # returns a CloudScraper instance
     print(scraper.user_agent.platform)
     print(scraper.user_agent.browser)
     print(scraper.user_agent.mobile)
     print(scraper.user_agent.desktop)
+    print('-----')
     print(scraper.get("https://app.geckoterminal.com/api/p1/solana/pools?include=tokens&page=2").text)
     i = i+1
 

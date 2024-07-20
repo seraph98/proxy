@@ -52,7 +52,7 @@ def pools():
             return cached_data  # 返回缓存数据
 
     # 如果没有缓存或缓存过期，进行请求
-    scraper = cloudscraper.create_scraper()
+    scraper = cloudscraper.create_scraper(browser="chrome")
     try:
         # raw_data = scraper.get(gecko_url, proxies=randProxies()).json()
         raw_data = scraper.get(gecko_url).json()
@@ -79,7 +79,7 @@ def latest_pools():
             return cached_data  # 返回缓存数据
 
     # 如果没有缓存或缓存过期，进行请求
-    scraper = cloudscraper.create_scraper()
+    scraper = cloudscraper.create_scraper(browser="chrome")
     try:
         # raw_data = scraper.get(gecko_url, proxies=randProxies()).json()
         raw_data = scraper.get(gecko_url).json()
