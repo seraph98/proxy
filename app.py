@@ -36,7 +36,7 @@ def randProxies():
 
 # 缓存字典
 cache = {}
-cache_expiry = 600  # 缓存有效期（秒）
+cache_expiry = 300  # 缓存有效期（秒）
 
 @app.route('/api/p1/solana/pools')
 def pools():
