@@ -54,8 +54,7 @@ def pools():
     # 如果没有缓存或缓存过期，进行请求
     scraper = cloudscraper.create_scraper(browser="chrome")
     try:
-        # raw_data = scraper.get(gecko_url, proxies=randProxies()).json()
-        raw_data = scraper.get(gecko_url).json()
+        raw_data = scraper.get(gecko_url, proxies=randProxies()).json()
         # 将请求结果和当前时间存入缓存
         cache[gecko_url] = (raw_data, current_time)
     except Exception as e:
@@ -81,8 +80,7 @@ def latest_pools():
     # 如果没有缓存或缓存过期，进行请求
     scraper = cloudscraper.create_scraper(browser="chrome")
     try:
-        # raw_data = scraper.get(gecko_url, proxies=randProxies()).json()
-        raw_data = scraper.get(gecko_url).json()
+        raw_data = scraper.get(gecko_url, proxies=randProxies()).json()
         # 将请求结果和当前时间存入缓存
         cache[gecko_url] = (raw_data, current_time)
     except Exception as e:
