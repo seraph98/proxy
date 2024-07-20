@@ -1,0 +1,32 @@
+from flask import Flask, request
+
+import cloudscraper
+
+
+# pip freeze > requirements.txt
+
+
+app = Flask(__name__)
+
+gecko_base = "https://app.geckoterminal.com"
+
+@app.route('/api/p1/solana/pools')
+def pools():
+    query = request.full_path
+    gecko_url = gecko_base + query
+    scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
+    # Or: scraper = cloudscraper.CloudScraper()  # CloudScraper inherits from requests.Session
+    return scraper.get(gecko_url).text  # => "<!DOCTYPE html><html><head>..."
+
+
+@app.route('/api/p1/solana/latest_pools')
+def latest_pools():
+    query = request.full_path
+    gecko_url = gecko_base + query
+    scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
+    # Or: scraper = cloudscraper.CloudScraper()  # CloudScraper inherits from requests.Session
+    return scraper.get(gecko_url).text  # => "<!DOCTYPE html><html><head>..."
+
+if __name__ == '__main__':
+    app.run()
+
