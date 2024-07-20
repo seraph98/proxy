@@ -22,13 +22,15 @@ def pools():
         raw_data = scraper.get(gecko_url, proxies=proxies)
         data = raw_data.json()
     except Exception as e:
+        print('==========')
         print(gecko_url)
         print(e)
+        print('----------')
         if raw_data:
             print('raw_data status code:', raw_data.status_code)  # 输出状态码
             print('raw_data text:', raw_data.text)                # 输出返回的文本内容
-        print('data:', data)  # 输出 dat
         print('data:', data)
+        print('----------')
         raise
     return data  # => "<!DOCTYPE html><html><head>..."
 
