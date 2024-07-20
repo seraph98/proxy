@@ -16,6 +16,8 @@ def pools():
     gecko_url = gecko_base + query
     scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
     # Or: scraper = cloudscraper.CloudScraper()  # CloudScraper inherits from requests.Session
+    raw_data = None  # 初始化 raw_data
+    data = None      # 初始化 data
     try:
         raw_data = scraper.get(gecko_url, proxies=proxies)
         data = raw_data.json()
