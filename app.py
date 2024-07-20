@@ -3,9 +3,6 @@ from flask import Flask, request
 import cloudscraper
 
 
-# pip freeze > requirements.txt
-
-
 app = Flask(__name__)
 
 gecko_base = "https://app.geckoterminal.com"
@@ -19,7 +16,14 @@ def pools():
     gecko_url = gecko_base + query
     scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
     # Or: scraper = cloudscraper.CloudScraper()  # CloudScraper inherits from requests.Session
-    return scraper.get(gecko_url, proxies=proxies).json()  # => "<!DOCTYPE html><html><head>..."
+    try:
+        data = scraper.get(gecko_url, proxies=proxies).json()
+    except Exception as e:
+        print(gecko_url)
+        print(e)
+        print(scraper.get(gecko_url, proxies=proxies))
+        raise
+    return data  # => "<!DOCTYPE html><html><head>..."
 
 
 @app.route('/api/p1/solana/latest_pools')
