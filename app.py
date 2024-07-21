@@ -55,6 +55,27 @@ def pools():
     proxy = randProxies()
     try:
         raw_data = scraper.get(gecko_url, proxies=proxy).json()
+        filtered_data = [
+            {
+                'attributes': {
+                    'token_value_data': item['attributes']['token_value_data'],
+                    'address': item['attributes']['address']
+                }
+            }
+            for item in raw_data['data']
+        ]
+        filtered_included = [
+            {
+                'attributes': {
+                    'address': item['attributes']['address']
+                },
+                'id': item['id'],
+                'type': item['type']
+            }
+            for item in raw_data['included']
+        ]
+        raw_data['data'] = filtered_data
+        raw_data['included'] = filtered_included
         # 将请求结果和当前时间存入缓存
         cache[gecko_url] = (raw_data, current_time)
     except Exception as e:
@@ -83,6 +104,27 @@ def latest_pools():
     proxy = randProxies()
     try:
         raw_data = scraper.get(gecko_url, proxies=proxy).json()
+        filtered_data = [
+            {
+                'attributes': {
+                    'token_value_data': item['attributes']['token_value_data'],
+                    'address': item['attributes']['address']
+                }
+            }
+            for item in raw_data['data']
+        ]
+        filtered_included = [
+            {
+                'attributes': {
+                    'address': item['attributes']['address']
+                },
+                'id': item['id'],
+                'type': item['type']
+            }
+            for item in raw_data['included']
+        ]
+        raw_data['data'] = filtered_data
+        raw_data['included'] = filtered_included
         # 将请求结果和当前时间存入缓存
         cache[gecko_url] = (raw_data, current_time)
     except Exception as e:
@@ -94,5 +136,5 @@ def latest_pools():
     return raw_data
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5001)
 
