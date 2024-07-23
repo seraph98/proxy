@@ -1,3 +1,4 @@
+from typing import final
 from flask import Flask, request
 import random
 import cloudscraper
@@ -83,7 +84,9 @@ def pools():
         print(gecko_url)
         print(e)
         print(proxy)
+        scraper.close()
         raise
+    scraper.close()
 
     return raw_data
 
@@ -131,7 +134,9 @@ def latest_pools():
         print(gecko_url)
         print(e)
         print(proxy)
+        scraper.close()
         raise
+    scraper.close()
 
     return raw_data
 
