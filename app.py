@@ -159,8 +159,7 @@ def spl_info():
     scraper = cloudscraper.create_scraper()
     proxy = randProxies()
     try:
-        # raw_data = scraper.get(solscan_url, proxies=proxy, headers={
-        raw_data = scraper.get(solscan_url,  headers={
+        raw_data = scraper.get(solscan_url, proxies=proxy, headers={
     'accept': 'application/json, text/plain, */*', 
     'accept-language': 'en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7', 
     'origin': 'https://solscan.io', 
@@ -192,5 +191,5 @@ def spl_info():
     return resp
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001)
+    app.run(host='0.0.0.0', port=5000)
 
