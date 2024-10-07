@@ -1,4 +1,3 @@
-from typing import final
 from flask import Flask, request
 import random
 import cloudscraper
