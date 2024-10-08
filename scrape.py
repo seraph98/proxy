@@ -66,6 +66,11 @@ scrape_instances: List[Scrape] = [
         ScrapeProxy("http://22dfafa3c7314d78ade014c0bebc371d32601bac799:@proxy.scrape.do:8080", Info("yang", 1000)),
         ScrapeProxy("http://scraperapi:c89235cf4298423fda4a363038029f71@proxy-server.scraperapi.com:8001", Info("yang", 1000)),
         ScrapeHTTP("https://scrape.serper.dev", "8c64ef663ee2019ec24d559ca997574b2d4d5fd4", Info("yang", 250)),
+
+
+        ScrapeProxy("http://266241928c824b93a30606ac3648529c56fb3ba5869:@proxy.scrape.do:8080", Info("yangfeilong.beyond", 1000)),
+        ScrapeProxy("http://scraperapi:245d8f5d832c6fc0f74ef3abd248780b@proxy-server.scraperapi.com:8001", Info("yangfeilong.beyond", 1000)),
+        ScrapeHTTP("https://scrape.serper.dev", "36c9159516b338ea7b65d387dd34594a7d831ea0", Info("yangfeilong.beyond", 250)),
         ]
 
 def select_scrape_instance() -> Scrape:
