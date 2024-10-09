@@ -86,6 +86,61 @@ scrape_instances: List[Scrape] = [
         ScrapeProxy("http://75948c8e3fa0478497e1ad107ae9778584982607989:@proxy.scrape.do:8080", Info("Fary", 1000)),
         ScrapeProxy("http://scraperapi:e92ae1bd4aaa3642b79020dec1fa5e4a@proxy-server.scraperapi.com:8001", Info("Fary", 1000)),
         ScrapeHTTP("https://scrape.serper.dev", "a31d707a72f41dfb07b3aec77f10b0c32b8a3503", Info("Fary", 250)),
+
+
+        ScrapeProxy("http://682f00ac60f548c0ad400fb44ff4dae550892ee624f:@proxy.scrape.do:8080", Info("seraph_02", 1000)),
+        ScrapeProxy("http://scraperapi:258ec9add23194f2f40b3baa8e87bc02@proxy-server.scraperapi.com:8001", Info("seraph_02", 1000)),
+        ScrapeHTTP("https://scrape.serper.dev", "916b82291490609fc99bad2cc20e3c48030f2889", Info("seraph_02", 250)),
+
+
+        ScrapeProxy("http://12cb4ffd200e4d3fac86a9a8ece4417ab29f15a4c96:@proxy.scrape.do:8080", Info("seraph_03", 1000)),
+        ScrapeProxy("http://scraperapi:472491dd747a979a2c5a9472471b94d7@proxy-server.scraperapi.com:8001", Info("seraph_03", 1000)),
+        ScrapeHTTP("https://scrape.serper.dev", "cc25609d6daa409b1540c2be2ba34d79a40b8bcf", Info("seraph_03", 250)),
+
+
+        ScrapeProxy("http://2776bd2636c54cd1a5790e3ba9eff198253379f1877:@proxy.scrape.do:8080", Info("seraph_04", 1000)),
+        ScrapeProxy("http://scraperapi:88f6abddcf0345a25a4862ef0c642072@proxy-server.scraperapi.com:8001", Info("seraph_04", 1000)),
+        ScrapeHTTP("https://scrape.serper.dev", "80e8c372a45b6a28469a94b387839cb916e6dc97", Info("seraph_04", 250)),
+
+
+        ScrapeProxy("http://2fce8c6503c54fb3a25cf6a8132fbe0391aae51df6e:@proxy.scrape.do:8080", Info("Ivoncita", 1000)),
+        ScrapeProxy("http://scraperapi:8f239b99576cd942e34fad0954de10ec@proxy-server.scraperapi.com:8001", Info("Ivoncita", 1000)),
+        ScrapeHTTP("https://scrape.serper.dev", "065b7425909a8719c840b093ef63e3fb9bc477fd", Info("Ivoncita", 250)),
+
+
+        ScrapeProxy("http://8c86b1eb192245ccbfe15d5eb2ab73be0de6e0f1e41:@proxy.scrape.do:8080", Info("Ned", 1000)),
+        ScrapeProxy("http://scraperapi:7e2cd9f5cd5b7efffab2dadb797a1179@proxy-server.scraperapi.com:8001", Info("Ned", 1000)),
+        ScrapeHTTP("https://scrape.serper.dev", "a93545e4a2e0764bebd470adabf446de8f688897", Info("Ned", 250)),
+
+
+        ScrapeProxy("http://b15a23b80bbf4c30926e645c1d1aa49814ef5e1a58c:@proxy.scrape.do:8080", Info("Keneth", 1000)),
+        ScrapeProxy("http://scraperapi:9e4238cdc78d3a0f0ef2002dcf2a7269@proxy-server.scraperapi.com:8001", Info("Keneth", 1000)),
+
+        ScrapeProxy("http://0c7eb7943ebf4e43853b8983218376228dd75e8519f:@proxy.scrape.do:8080", Info("Kumi", 1000)),
+        ScrapeProxy("http://scraperapi:2570f81a2a2939e15f28671103541156@proxy-server.scraperapi.com:8001", Info("Kumi", 1000)),
+
+
+        ScrapeProxy("http://0a53af20d58744cf9991c3b5a3e9e238c89f5a24ea0:@proxy.scrape.do:8080", Info("ROjin", 1000)),
+        ScrapeProxy("http://scraperapi:1538a3ab82a29cec49b1109a02692a2a@proxy-server.scraperapi.com:8001", Info("ROjin", 1000)),
+
+
+        ScrapeProxy("http://d16d04a9b77c4107b6d94198f6c88dc5b3c70bc670c:@proxy.scrape.do:8080", Info("Yunshi", 1000)),
+        ScrapeProxy("http://scraperapi:f04aea33ff27753a32ada2e15b562316@proxy-server.scraperapi.com:8001", Info("Yunshi", 1000)),
+
+
+        ScrapeProxy("http://0c63b40fd3a4488ba7f94b49177ec303ddf1cf06ff1:@proxy.scrape.do:8080", Info("Sidonie", 1000)),
+        ScrapeProxy("http://scraperapi:0ba288a83ca960d01b442db1c3b466ad@proxy-server.scraperapi.com:8001", Info("Sidonie", 1000)),
+
+        ScrapeProxy("http://86d155d0107546b09d598e714f3b6a7474a51f5c91a:@proxy.scrape.do:8080", Info("Bayadares", 1000)),
+        ScrapeProxy("http://scraperapi:4b25f539218b33ffdba94320432874c5@proxy-server.scraperapi.com:8001", Info("Bayadares", 1000)),
+
+
+        ScrapeProxy("http://0cf9cd73df29473293383cd0018860aa018abe72c52:@proxy.scrape.do:8080", Info("Lincoln", 1000)),
+        ScrapeProxy("http://scraperapi:deb4f5cb9b289c7bb8b9b8ab13ab81ca@proxy-server.scraperapi.com:8001", Info("Lincoln", 1000)),
+
+
+        ScrapeProxy("http://9343d9750ea84168a4d0bc329a6b027bcaf3bab101a:@proxy.scrape.do:8080", Info("Rivkin", 1000)),
+        ScrapeProxy("http://scraperapi:fd47a4bfb978252b1e25abcf867639e8@proxy-server.scraperapi.com:8001", Info("Rivkin", 1000)),
         ]
 
 def select_scrape_instance() -> Scrape:
