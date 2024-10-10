@@ -25,19 +25,20 @@ status_lock = Lock()
 
 # Function to check if a proxy works
 def check_proxy(proxy):
-    proxies = {
-        "http": proxy,
-        "https": proxy,
-    }
+    return proxy, True
+    # proxies = {
+        # "http": proxy,
+        # "https": proxy,
+    # }
 
-    try:
-        response = requests.get(target_url, proxies=proxies, timeout=5)
-        if response.status_code == 200:
-            return proxy, True
-    except requests.exceptions.RequestException:
-        return proxy, False  # Ensure to return false if an error occurs
+    # try:
+        # response = requests.get(target_url, proxies=proxies, timeout=5)
+        # if response.status_code == 200:
+            # return proxy, True
+    # except requests.exceptions.RequestException:
+        # return proxy, False  # Ensure to return false if an error occurs
 
-    return proxy, False  # Ensure to return false if an error occurs
+    # return proxy, False  # Ensure to return false if an error occurs
 
 def get_proxies_from_geonode():
     limit = 500
