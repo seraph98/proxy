@@ -24,8 +24,8 @@ def check_proxy(proxy):
         response = requests.get(target_url, proxies=proxies, timeout=5)
         if response.status_code == 200:
             return proxy, True
-    except requests.exceptions.RequestException as e:
-        print(f"Error checking proxy {proxy}: {e}")
+    except requests.exceptions.RequestException:
+        return proxy, False  # Ensure to return false if an error occurs
 
     return proxy, False  # Ensure to return false if an error occurs
 
@@ -121,5 +121,5 @@ def main():
 if __name__ == "__main__":
     # Start the Flask app in a separate thread
     from threading import Thread
-    Thread(target=lambda: app.run(port=6666, debug=False)).start()
-    main()
+    Thread(target=main).start()
+    app.run(host='0.0.0.0', port=5009)  # 在5000端口启动Flask服务
