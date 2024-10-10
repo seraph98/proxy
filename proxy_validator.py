@@ -3,6 +3,9 @@ import json
 import time
 from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, jsonify
+from threading import Thread, Lock
+import signal
+import sys
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -10,8 +13,14 @@ app = Flask(__name__)
 # Target URL to validate proxies
 target_url = "https://public.jupiterapi.com/quote?inputMint=So11111111111111111111111111111111111111112&outputMint=CcTxKZHqU4E2Tek5gh1GZoPZPHncGFkZ36EVMsgDn6sK&amount=1000&slippageBps=1"
 
-# Global list to store valid proxies
+# Global list to store valid proxies and task status
 valid_proxies = []
+task_status = {
+    'last_refresh_time': None,
+    'total_checked': 0,
+    'valid_count': 0,
+}
+status_lock = Lock()
 
 # Function to check if a proxy works
 def check_proxy(proxy):
@@ -35,7 +44,7 @@ def get_proxies_from_geonode():
     total = 0
     proxies = []
 
-    while limit * (page - 1) <= total:
+    while True:
         url = f"https://proxylist.geonode.com/api/proxy-list?speed=fast&limit={limit}&page={page}&sort_by=speed&sort_type=asc"
         try:
             response = requests.get(url)
@@ -45,11 +54,16 @@ def get_proxies_from_geonode():
                 proxy_str = f"{item['protocols'][0]}://{item['ip']}:{item['port']}"
                 proxies.append(proxy_str)
             total = int(data['total'])
+            if total <= limit * (page - 1):
+                break
             page += 1
         except requests.exceptions.RequestException as e:
-            print(f"请求错误: {e}")
+            print(f"Request error: {e}")
+            break  # Exit if there is an error fetching proxies
         except ValueError as e:
-            print(f"解析错误: {e}")
+            print(f"Parsing error: {e}")
+            break
+
     return proxies
 
 def fetch_proxies(protocol):
@@ -82,20 +96,26 @@ def save_valid_proxies_to_file(filename, valid_proxies):
 def get_valid_proxies():
     return jsonify(valid_proxies), 200
 
+# New API endpoint for task status
+@app.route('/task_status', methods=['GET'])
+def get_task_status():
+    with status_lock:
+        return jsonify(task_status), 200
+
 def main():
-    global valid_proxies
+    global valid_proxies, task_status
     proxies_file = "valid_proxies.txt"
     valid_proxies = load_proxies_from_file(proxies_file)
 
     # Fetch new proxies
     proxies = get_proxies_from_geonode() + fetch_proxies("http") + fetch_proxies("socks5") + fetch_proxies("socks4")
-    proxies = list(set(proxies) | set(valid_proxies))  # Remove already valid proxies to avoid redundancy
+    proxies = list(set(proxies) | set(valid_proxies))  # Avoid redundancy
 
     print(f"Fetched {len(proxies)} new proxies.")
 
     while True:
-        # Use ThreadPoolExecutor for concurrent proxy checks
-        valid_proxies_temp = valid_proxies.copy()  # Create a temporary list of valid proxies
+        valid_proxies_temp = []  # Create a temporary list of valid proxies
+        task_status['total_checked'] = len(proxies)  # Update total checked
         with ThreadPoolExecutor(max_workers=20) as executor:
             results = executor.map(check_proxy, proxies)
 
@@ -104,22 +124,30 @@ def main():
                 proxy, is_valid = result
                 if is_valid:
                     print(f"Proxy {proxy} is valid.")
-                    if proxy not in valid_proxies_temp:  # Avoid duplicates
+                    if proxy not in valid_proxies_temp:
                         valid_proxies_temp.append(proxy)
+                        with status_lock:
+                            task_status['valid_count'] += 1  # Increment valid count
                 else:
                     print(f"Proxy {proxy} is not valid.")
-            else:
-                print("Received None from check_proxy, skipping...")
 
-        valid_proxies = valid_proxies_temp  # Update valid proxies
-        save_valid_proxies_to_file(proxies_file, valid_proxies)  # Save valid proxies to file
+        with status_lock:
+            valid_proxies = valid_proxies_temp  # Update valid proxies
+            save_valid_proxies_to_file(proxies_file, valid_proxies)  # Save valid proxies to file
+            task_status['last_refresh_time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())  # Update last refresh time
+
         print(f"Valid proxies saved: {len(valid_proxies)}")
 
-        # Sleep for some time before the next iteration
         time.sleep(5)  # Adjust the sleep time as needed
 
+def signal_handler(sig, frame):
+    print('Exiting gracefully...')
+    sys.exit(0)
+
 if __name__ == "__main__":
+    # Register SIGINT handler
+    signal.signal(signal.SIGINT, signal_handler)
+    
     # Start the Flask app in a separate thread
-    from threading import Thread
     Thread(target=main).start()
-    app.run(host='0.0.0.0', port=5009)  # 在5000端口启动Flask服务
+    app.run(host='0.0.0.0', port=5009)
