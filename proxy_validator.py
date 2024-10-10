@@ -182,7 +182,7 @@ def main():
             task_status['last_refresh_time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())  # Update last refresh time
 
         print(f"Valid proxies saved: {len(valid_proxies)}")
-        time.sleep(5)  # Adjust the sleep time as needed
+        time.sleep(60)  # Adjust the sleep time as needed
 
 def signal_handler(sig, frame):
     print('Exiting gracefully...')
