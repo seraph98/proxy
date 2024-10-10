@@ -101,7 +101,10 @@ def get_valid_proxies():
 @app.route('/task_status', methods=['GET'])
 def get_task_status():
     with status_lock:
-        return jsonify(task_status), 200
+        return jsonify({
+            "status":task_status,
+            "proxy_success_rates": proxy_success_rates
+            }), 200
 
 # New API endpoint to report proxy success rate
 @app.route('/report_proxy', methods=['POST'])
