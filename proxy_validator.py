@@ -160,6 +160,7 @@ def main():
     print(f"Fetched {len(proxies)} new proxies.")
 
     while True:
+        currently_valid = []
         task_status['total_checked'] = len(proxies)  # Update total checked
         with ThreadPoolExecutor(max_workers=20) as executor:
             results = executor.map(check_proxy, proxies)
@@ -168,10 +169,12 @@ def main():
             if result is not None:  # Check if result is not None
                 proxy, is_valid = result
                 if is_valid:
+                    currently_valid.append(proxy)
                     print(f"Proxy {proxy} is valid.")
                 else:
                     print(f"Proxy {proxy} is not valid.")
 
+        valid_proxies = currently_valid  # Update valid proxies
         # Calculate the current valid proxies based on success rates
         calculate_valid_proxies()
 
