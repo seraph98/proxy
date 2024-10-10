@@ -2,7 +2,7 @@ import requests
 import json
 import time
 from concurrent.futures import ThreadPoolExecutor
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from threading import Thread, Lock
 import signal
 import sys
@@ -15,6 +15,7 @@ target_url = "https://public.jupiterapi.com/quote?inputMint=So111111111111111111
 
 # Global list to store valid proxies and task status
 valid_proxies = []
+proxy_success_rates = {}
 task_status = {
     'last_refresh_time': None,
     'total_checked': 0,
@@ -102,6 +103,47 @@ def get_task_status():
     with status_lock:
         return jsonify(task_status), 200
 
+# New API endpoint to report proxy success rate
+@app.route('/report_proxy', methods=['POST'])
+def report_proxy():
+    data = request.get_json()
+    proxy = data.get('proxy')
+    success = data.get('success')  # Expected to be a boolean
+
+    if proxy not in proxy_success_rates:
+        proxy_success_rates[proxy] = {'success_count': 0, 'fail_count': 0}
+
+    if success:
+        proxy_success_rates[proxy]['success_count'] += 1
+    else:
+        proxy_success_rates[proxy]['fail_count'] += 1
+
+    return jsonify({'message': 'Proxy success status recorded'}), 200
+
+def calculate_valid_proxies():
+    global valid_proxies
+    currently_valid = []
+
+    for proxy in valid_proxies:
+        # Default to True if not present in proxy_success_rates
+        stats = proxy_success_rates.get(proxy, {'success_count': 0, 'fail_count': 0})
+        total_attempts = stats['success_count'] + stats['fail_count']
+
+        # Calculate the success rate if there are attempts made
+        if total_attempts > 10:
+            success_rate = stats['success_count'] / total_attempts
+            # Only filter out if success_rate < 0.8
+            if success_rate >= 0.8:
+                currently_valid.append(proxy)
+        else:
+            # If total_attempts is 0, we don't filter out the proxy
+            currently_valid.append(proxy)
+
+    with status_lock:
+        valid_proxies = currently_valid  # Update valid proxies
+        task_status['valid_count'] = len(valid_proxies)  # Update valid count
+
+
 def main():
     global valid_proxies, task_status
     proxies_file = "valid_proxies.txt"
@@ -114,7 +156,6 @@ def main():
     print(f"Fetched {len(proxies)} new proxies.")
 
     while True:
-        valid_proxies_temp = []  # Create a temporary list of valid proxies
         task_status['total_checked'] = len(proxies)  # Update total checked
         with ThreadPoolExecutor(max_workers=20) as executor:
             results = executor.map(check_proxy, proxies)
@@ -124,20 +165,19 @@ def main():
                 proxy, is_valid = result
                 if is_valid:
                     print(f"Proxy {proxy} is valid.")
-                    if proxy not in valid_proxies_temp:
-                        valid_proxies_temp.append(proxy)
-                        with status_lock:
-                            task_status['valid_count'] += 1  # Increment valid count
                 else:
                     print(f"Proxy {proxy} is not valid.")
 
+        # Calculate the current valid proxies based on success rates
+        calculate_valid_proxies()
+
+        # Save valid proxies to file
+        save_valid_proxies_to_file(proxies_file, valid_proxies)  
+        
         with status_lock:
-            valid_proxies = valid_proxies_temp  # Update valid proxies
-            save_valid_proxies_to_file(proxies_file, valid_proxies)  # Save valid proxies to file
             task_status['last_refresh_time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())  # Update last refresh time
 
         print(f"Valid proxies saved: {len(valid_proxies)}")
-
         time.sleep(5)  # Adjust the sleep time as needed
 
 def signal_handler(sig, frame):
@@ -151,3 +191,4 @@ if __name__ == "__main__":
     # Start the Flask app in a separate thread
     Thread(target=main).start()
     app.run(host='0.0.0.0', port=5009)
+
